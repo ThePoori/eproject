@@ -1,0 +1,35 @@
+{% extends 'parent/base.html' %}
+{% block title %}Ticket Form{% endblock %}
+{% block content %}
+    <form method="post">
+    {% csrf_token %}
+    <div>
+        {{ form.message.label }}
+        {{ form.message }}
+        {{ form.message.errors }}
+    </div>
+    <div>
+        {{ form.name.label }}
+        {{ form.name }}
+        {{ form.name.errors }}
+    </div>
+    <div>
+        {{ form.email.label }}
+        {{ form.email }}
+        {{ form.email.errors }}
+    </div>
+    <div>
+        {{ form.phone.label }}
+        {{ form.phone }}
+        {{ form.phone.errors }}
+    </div>
+    <div>
+        {{ form.subject.label }}
+        {{ form.subject }}
+        {{ form.subject.errors }}
+    </div>
+    <div>
+        <input type="submit" value="ثبت">
+    </div>
+    </form>
+{% endblock %}

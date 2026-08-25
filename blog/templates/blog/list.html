@@ -1,0 +1,17 @@
+{% extends 'parent/base.html' %}
+{% block title %} Post List {% endblock %}
+{% block content %}
+    <h1>Post List</h1>
+    <ol style="--length: {{ posts|length }}" role="list">
+    {% for field in posts %}
+        <li style="--i: {{ forloop.counter }}">
+        <h2>
+            <a href="{% url 'blog:post_detail' id=field.id %}">{{ field.title }}</a>
+        </h2>
+        <p>{{ field.description|truncatewords:12 }}</p>
+        </li>
+    {% endfor %}
+    </ol>
+    {% include 'partials/pagination.html' %}
+{% endblock %}
+

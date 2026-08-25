@@ -1,0 +1,9 @@
+{% extends 'parent/base.html' %}
+{% block title %} Post Detail {% endblock %}
+{% block content %}
+    <h1>Post Detail</h1>
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.description|linebreaks }}</p>
+    <hr>
+    <p>{{ post.publish|date:"Y / m / d" }}</p>
+{% endblock %}
