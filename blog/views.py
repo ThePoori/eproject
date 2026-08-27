@@ -1,9 +1,10 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Model
 from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
-from blog.forms import TicketForm
+from blog.forms import TicketForm, CommentForm
 from blog.models import *
 
 
@@ -36,21 +37,21 @@ class PostListView(ListView):
     template_name = 'blog/list.html'
 
 
-# def post_detail(request, id):
-#     try:
-#         post = Post.published.get(id = id)
-#     except:
-#         raise Http404("Post does not exist")
-#     context = {
-#         "post": post
-#     }
-#     return render(request, "blog/detail.html", context)
+def post_detail(request, id):
+    try:
+        post = Post.published.get(id = id)
+    except:
+        raise Http404("Post does not exist")
+    context = {
+        "post": post
+    }
+    return render(request, "blog/detail.html", context)
 
 
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'blog/detail.html'
-    pk_url_kwarg = 'id'
+# class PostDetailView(DetailView):
+#     model = Post
+#     template_name = 'blog/detail.html'
+#     pk_url_kwarg = 'id'
 
 
 def ticket(request):
@@ -69,3 +70,21 @@ def ticket(request):
     else:
         form = TicketForm()
     return render(request, 'forms/ticket.html', {"form":form})
+
+
+@require_POST
+def post_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+    comment = None
+    form = CommentForm(data=request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.save()
+    context = {
+        "post": post,
+        "comment": comment,
+        "form": form,
+    }
+    return render(request, "forms/comment.html", context)
+

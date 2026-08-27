@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from blog.models import Post, Ticket
+from blog.models import *
 
 # Register your models here.
 
@@ -22,3 +22,10 @@ class TicketAdmin(admin.ModelAdmin):
     list_display = ["name", "subject", "message", "email", "phone"]
     list_filter = ["name"]
     search_fields = ["name", "subject", "message"]
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['post', "name", "created", "active"]
+    list_filter = ['active', 'created', 'updated']
+    search_fields = ['name', 'body']
+    list_editable = ['active']
