@@ -13,7 +13,7 @@ from blog.models import *
 
 
 def index(request):
-    return HttpResponse("This is a index page")
+    return render(request, "blog/index.html")
 #
 # def post_list(request):
 #     posts = Post.published.all()
@@ -38,12 +38,13 @@ class PostListView(ListView):
 
 
 def post_detail(request, id):
-    try:
-        post = Post.published.get(id = id)
-    except:
-        raise Http404("Post does not exist")
+    post = get_object_or_404(Post, id=id, status=Post.Status.PUBLISHED)
+    comments = post.comments.filter(active=True)
+    form = CommentForm()
     context = {
-        "post": post
+        "post": post,
+        "form": form,
+        "comments": comments,
     }
     return render(request, "blog/detail.html", context)
 

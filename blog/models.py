@@ -63,12 +63,12 @@ class Ticket(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments', verbose_name="پست")
-    name = models.CharField(max_length=250, verbose_name="نام")
-    body = models.TextField(verbose_name="متن کامنت")
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    active = models.BooleanField(default=False)
+    post = models.ForeignKey(Post, on_delete = models.CASCADE, related_name = 'comments', verbose_name = "پست")
+    name = models.CharField(max_length = 250, verbose_name = "نام")
+    body = models.TextField(verbose_name = "متن کامنت")
+    created = models.DateTimeField(auto_now_add = True, verbose_name = "تاریخ ایجاد")
+    updated = models.DateTimeField(auto_now=True, verbose_name = "تاریخ ویرایش")
+    active = models.BooleanField(default=False, verbose_name = "وضعیت")
 
     class Meta:
         ordering = ["created"]
