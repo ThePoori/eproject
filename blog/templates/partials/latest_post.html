@@ -1,0 +1,13 @@
+<div>
+    <h2>
+        آخرین پست ها
+    </h2>
+    {% for post in l_posts %}
+        <p>
+            <a href="{{ post.get_absolute_url }}">
+                {{ post.title }} : {{ post.publish|date:"Y / m / d" }}
+            </a>
+        </p>
+
+    {% endfor %}
+</div>

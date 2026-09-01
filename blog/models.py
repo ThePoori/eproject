@@ -26,6 +26,8 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now = True)
     # Choose Fields
     status = models.CharField(max_length = 2, choices = Status.choices, default = Status.DRAFT)
+    reading_time = models.PositiveIntegerField(verbose_name = "زمان مطالعه")
+    
     # Manages
     objects = models.Manager()
     published = PublishedManager()

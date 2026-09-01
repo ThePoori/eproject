@@ -1,9 +1,10 @@
 {% extends 'parent/base.html' %}
+{% load blog_tags %}
 {% block title %} Post Detail {% endblock %}
 {% block content %}
     <h1>Post Detail</h1>
     <h2>{{ post.title }}</h2>
-    {{ post.description|linebreaks }}
+    {{ post.description | markdown | linebreaks }}
     <hr>
     <p>{{ post.publish|date:"Y / m / d" }}</p>
     {% with comments.count as cm_count %}

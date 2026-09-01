@@ -1,5 +1,8 @@
 from django import template
 from blog.models import *
+from django.db.models import Count
+from markdown import markdown
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -17,3 +20,21 @@ def total_comments():
 @register.simple_tag()
 def last_post_date():
     return Post.published.last().publish
+
+@register.simple_tag
+def most_popular_posts(count=5):
+    return Post.published.annotate(comment_count=Count("comments")).order_by("-comment_count")[:count]
+
+
+@register.inclusion_tag("partials/latest_post.html")
+def latest_posts(count=4):
+    l_posts = Post.published.order_by('-publish')[:count]
+    context = {
+        'l_posts': l_posts
+    }
+    return context
+
+
+@register.filter(name='markdown')
+def to_markdown(text):
+    return mark_safe(markdown(text))

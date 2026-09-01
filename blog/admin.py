@@ -10,7 +10,7 @@ admin.sites.AdminSite.index_title = "مدیریت"
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    fields = ["author", "title", "description", "slug", "publish", "status"]
+    fields = ["author", "title", "description", "slug", "publish", "status", "reading_time"]
     list_display = ["title", "author", "publish", "status"]
     list_filter = ["publish", "status"]
     search_fields = ["title", "description"]
