@@ -34,4 +34,25 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['name', 'body']
-        
+
+
+class PostForm(forms.ModelForm):
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if title:
+            if len(title) < 2:
+                raise forms.ValidationError("عنوان باید طول رشته بیشتری داشته باشد.")
+            else:
+                return title
+    def clean_description(self):
+        description = self.cleaned_data['description']
+        if description:
+            if len(description) >= 250:
+                raise forms.ValidationError("مقدار متن توضیحات زیاد میباشد.")
+            else:
+                return description
+    class Meta:
+        model = Post
+        fields = ['author', 'title', 'description', 'slug', 'publish', 'status', 'reading_time']
+
+

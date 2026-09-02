@@ -14,5 +14,7 @@
         <br>
         <a href="{{ post.get_absolute_url }}">{{ post.title }} : with {{ post.comment_count }} comments</a>
     {% endfor %}
-    
+
+    <h2> بیشترین تایم مطالعه </h2>
+    <a href="{{ post.get_absolute_url }}">{% max_reading_time %}</a>
 {% endblock %}

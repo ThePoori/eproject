@@ -1,0 +1,36 @@
+{% extends 'parent/base.html' %}
+{% block title %}Create Post{% endblock %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.author.label }}
+        {{ form.author }}
+        {{ form.author.errors }}
+        <br>
+        {{ form.title.label }}
+        {{ form.title }}
+        {{ form.title.errors }}
+        <br>
+        {{ form.description.label }}
+        {{ form.description }}
+        {{ form.description.errors }}
+        <br>
+        {{ form.slug.label }}
+        {{ form.slug }}
+        {{ form.slug.errors }}
+        <br>
+        {{ form.publish.label }}
+        {{ form.publish }}
+        {{ form.publish.errors }}
+        <br>
+        {{ form.status.label }}
+        {{ form.status }}
+        {{ form.status.errors }}
+        <br>
+        {{ form.reading_time.label }}
+        {{ form.reading_time }}
+        {{ form.reading_time.errors }}
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

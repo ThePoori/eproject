@@ -1,6 +1,6 @@
 from django import template
 from blog.models import *
-from django.db.models import Count
+from django.db.models import Count, Max, Min
 from markdown import markdown
 from django.utils.safestring import mark_safe
 
@@ -38,3 +38,8 @@ def latest_posts(count=4):
 @register.filter(name='markdown')
 def to_markdown(text):
     return mark_safe(markdown(text))
+
+
+@register.simple_tag
+def max_reading_time(count=5):
+    return Post.published.aggregate(max_read_time=Max('reading_time'))

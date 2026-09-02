@@ -1,10 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Model
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
-from blog.forms import TicketForm, CommentForm
+from blog.forms import TicketForm, CommentForm, PostForm
 from blog.models import *
 
 
@@ -89,3 +90,15 @@ def post_comment(request, post_id):
     }
     return render(request, "forms/comment.html", context)
 
+
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect("blog:index")
+    else:
+        form = PostForm()
+    return render(request, "forms/create_post.html", {"form": form})
