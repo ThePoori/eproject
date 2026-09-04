@@ -3,11 +3,8 @@ from blog.models import *
 from django.db.models import Count, Max, Min
 from markdown import markdown
 from django.utils.safestring import mark_safe
-from django.contrib.auth import get_user_model
-import re
 
 register = template.Library()
-User = get_user_model()
 
 # get post count
 @register.simple_tag()
@@ -29,14 +26,6 @@ def last_post_date():
 def most_popular_posts(count=5):
     return Post.published.annotate(comment_count=Count("comments")).order_by("-comment_count")[:count]
 
-
-@register.simple_tag
-def most_popular_author(count=5):
-    top_users = User.objects.annotate(post_count=Count("user_posts")).order_by("-post_count")[:count]
-    if top_users:
-        return Post.published.filter(author__in=top_users).select_related("author").order_by('-publish')
-    return Post.published.none()
-
 # use inclusion tag
 @register.inclusion_tag("partials/latest_post.html")
 def latest_posts(count=4):
@@ -50,6 +39,11 @@ def latest_posts(count=4):
 @register.filter(name='markdown')
 def to_markdown(text):
     return mark_safe(markdown(text))
+
+# just practice
+# @register.simple_tag
+# def max_reading_time(count=5):
+#     return Post.published.aggregate(max_read_time=Max('reading_time'))
 
 
 @register.simple_tag
@@ -69,7 +63,7 @@ def min_reading_time():
         return post
     return None
 
-
+import re
 @register.filter
 def censor(value):
     if not isinstance(value, str):
@@ -79,3 +73,12 @@ def censor(value):
         pattern = re.compile(re.escape(word), re.IGNORECASE)
         value = pattern.sub('*' * len(word), value)
     return value
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
+@register.simple_tag
+def most_popular_author(count=5):
+    top_users = User.objects.annotate(post_count=Count("user_posts")).order_by("-post_count")[:count]
+    if top_users:
+        return Post.published.filter(author__in=top_users).select_related("author").order_by('-publish')
+    return Post.published.none()
