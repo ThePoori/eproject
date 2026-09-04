@@ -15,6 +15,24 @@
         <a href="{{ post.get_absolute_url }}">{{ post.title }} : with {{ post.comment_count }} comments</a>
     {% endfor %}
 
-    <h2> بیشترین تایم مطالعه </h2>
-    <a href="{{ post.get_absolute_url }}">{% max_reading_time %}</a>
+    <h2> فعال ترین کاربر </h2>
+    {% most_popular_author as active_user_posts %}
+        {% if active_user_posts %}
+            {% for post in active_user_posts %}
+                <br>
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    ({{ post.author }})
+            {% endfor %}
+        {% else %}
+            <p>هیچ پستی برای نمایش وجود ندارد.</p>
+        {% endif %}
+
+    <h2> بیشترین زمان مطالعه </h2>
+        {% max_reading_time as max_post %}
+    <a href="{{ max_post.get_absolute_url }}">{{ max_post.title }}</a> ({{ max_post.reading_time }} دقیقه )
+
+    <h2> کمرین زمان مطالعه </h2>
+    {% min_reading_time as min_post %}
+    <a href="{{ min_post.get_absolute_url }}">{{ min_post.title }}</a> ({{ min_post.reading_time }} دقیقه )
+
 {% endblock %}
