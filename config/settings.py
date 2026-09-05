@@ -69,7 +69,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
+# Old Database
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
@@ -80,6 +80,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 #     }
 # }
 
+# New Database
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
