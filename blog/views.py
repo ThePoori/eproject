@@ -5,8 +5,10 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
-from blog.forms import TicketForm, CommentForm, PostForm
+from blog.forms import TicketForm, CommentForm, PostForm, SearchForm
 from blog.models import *
+from django.db.models import Q
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 
 
 # Create your views here.
@@ -102,3 +104,20 @@ def create_post(request):
     else:
         form = PostForm()
     return render(request, "forms/create_post.html", {"form": form})
+
+
+def post_search(request):
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(data=request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            results = Post.published.annotate(similarity=TrigramSimilarity('title', query)).filter(similarity__gt=0).order_by('-similarity')
+    context = {
+        "query": query,
+        "results": results,
+    }
+    return render(request, 'blog/search.html', context)
+
+

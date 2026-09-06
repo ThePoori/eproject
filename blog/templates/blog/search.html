@@ -1,0 +1,20 @@
+{% extends 'parent/base.html' %}
+{% block title %} Post Search {% endblock %}
+{% block content %}
+    {% if query %}
+        {{ results.count }} : ({{ query }})جستجو بر اساس
+    {% endif %}
+    <br>
+    <ol style="--length: {{ results|length }}" role="list">
+    {% for post in results %}
+        <li style="--i: {{ forloop.counter }}">
+        <br>
+        <h2>
+            <a href="{{ post.get_absolute_url }}"> {{ post.title }} </a>
+        </h2>
+        <p> {{ post.description|truncatewords:12 }} </p>
+    {% empty %}
+        نتیجه ای یافت نشد.
+    {% endfor %}
+{% endblock %}
+

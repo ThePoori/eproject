@@ -56,3 +56,5 @@ class PostForm(forms.ModelForm):
         fields = ['author', 'title', 'description', 'slug', 'publish', 'status', 'reading_time']
 
 
+class SearchForm(forms.Form):
+    query = forms.CharField()
