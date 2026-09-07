@@ -63,6 +63,7 @@ def min_reading_time():
         return post
     return None
 
+# filter words
 import re
 @register.filter
 def censor(value):
