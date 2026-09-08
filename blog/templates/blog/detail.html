@@ -5,6 +5,11 @@
     <h1>Post Detail</h1>
     <h2>{{ post.title }}</h2>
     {{ post.description | censor | markdown | linebreaks }}
+    {% for img in post.images.all %}
+        <br>
+        <img src="{{ img.image_file.url }}" alt="{{ img.title }}">
+    {% endfor %}
+    
     <hr>
     <p>{{ post.publish|date:"Y / m / d" }}</p>
     {% with comments.count as cm_count %}

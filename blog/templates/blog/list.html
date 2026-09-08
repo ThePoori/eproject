@@ -9,6 +9,7 @@
             <a href="{% url 'blog:post_detail' id=field.id %}">{{ field.title }}</a>
         </h2>
         <p>{{ field.description|truncatewords:12 }}</p>
+            <img src="{{ field.images.first.image_file.url }}" alt="{{ field.images.first.title }}">
         </li>
     {% endfor %}
     </ol>

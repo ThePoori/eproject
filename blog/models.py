@@ -2,7 +2,10 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-
+from django_resized import ResizedImageField
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+import os
 
 # Create your models here.
 class PublishedManager(models.Manager):
@@ -83,3 +86,28 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.name} : {self.post}"
 
+
+class Image(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images', verbose_name="پست")
+    image_file = ResizedImageField(upload_to="post_images/", size=[500, 500], quality=75, crop=["middle", "center"])
+    title = models.CharField(max_length=250, verbose_name="عنوان", null=True, blank=True)
+    description = models.TextField(verbose_name="توضیحات", null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created"]
+        indexes = [
+            models.Index(fields = ["created"]),
+        ]
+        verbose_name = "تصویر"
+        verbose_name_plural = "تصویر ها"
+
+    def __str__(self):
+        return self.title if self.title else "None"
+
+
+@receiver(post_delete, sender=Post)
+def delete_post_images(sender, instance, **kwargs):
+    for image in instance.images.all():
+        if image.image_file and os.path.isfile(image.image_file.path):
+            os.remove(image.image_file.path)

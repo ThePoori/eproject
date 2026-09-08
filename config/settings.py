@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
-
+import os.path
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -129,7 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = "static/"
-
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join("media")
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
@@ -139,3 +140,12 @@ MAILERS = {
         "BACKEND": "django.core.mail.backends.console.EmailBackend",
     },
 }
+
+# django-resized
+# DJANGORESIZED_DEFAULT_SIZE = [1920, 1080]
+# DJANGORESIZED_DEFAULT_SCALE = 0.5
+# DJANGORESIZED_DEFAULT_QUALITY = 75
+# DJANGORESIZED_DEFAULT_KEEP_META = True
+# DJANGORESIZED_DEFAULT_FORCE_FORMAT = 'JPEG'
+# DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'JPEG': ".jpg"}
+DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = False
