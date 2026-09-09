@@ -45,7 +45,7 @@ def to_markdown(text):
 # def max_reading_time(count=5):
 #     return Post.published.aggregate(max_read_time=Max('reading_time'))
 
-
+# max reading time
 @register.simple_tag
 def max_reading_time():
     max_time = Post.published.aggregate(max_val=Max('reading_time'))['max_val']
@@ -54,7 +54,7 @@ def max_reading_time():
         return post
     return None
 
-
+# min reading time
 @register.simple_tag
 def min_reading_time():
     min_time = Post.published.aggregate(min_val=Min('reading_time'))['min_val']
