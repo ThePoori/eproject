@@ -6,6 +6,7 @@ from django_resized import ResizedImageField
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 import os
+from django.core.files.storage import default_storage
 
 # Create your models here.
 class PublishedManager(models.Manager):
@@ -106,8 +107,7 @@ class Image(models.Model):
         return self.title if self.title else "None"
 
 
-@receiver(post_delete, sender=Post)
-def delete_post_images(sender, instance, **kwargs):
-    for image in instance.images.all():
-        if image.image_file and os.path.isfile(image.image_file.path):
-            os.remove(image.image_file.path)
+@receiver(post_delete, sender=Image)
+def delete_image_file(sender, instance, **kwargs):
+    if instance.image_file:
+        default_storage.delete(instance.image_file.name)
