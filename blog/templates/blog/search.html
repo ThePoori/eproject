@@ -2,19 +2,32 @@
 {% block title %} Post Search {% endblock %}
 {% block content %}
     {% if query %}
-        {{ results.count }} : ({{ query }})جستجو بر اساس
+        {{ post_results.count }} : ({{ query }})جستجو بر اساس
+        <br>
+        ({{ image_results.count }}) item in images
     {% endif %}
     <br>
-    <ol style="--length: {{ results|length }}" role="list">
-    {% for post in results %}
+    <ol style="--length: {{ post_results|length }}" role="list">
+    {% for post in post_results %}
         <li style="--i: {{ forloop.counter }}">
         <br>
         <h2>
             <a href="{{ post.get_absolute_url }}"> {{ post.title }} </a>
         </h2>
         <p> {{ post.description|truncatewords:12 }} </p>
+        </li>
     {% empty %}
         نتیجه ای یافت نشد.
     {% endfor %}
+    </ol>
+    <ol style="--length: {{ post_results|length }}" role="list">
+    {% for img in image_results %}
+        <li style="--i: {{ forloop.counter }}">
+        <br>
+        <img src="{{ img.image_file.url }}" alt="{{ img.title }}">
+        <p> {{ img.description|truncatewords:12 }} </p>
+        </li>
+    {% endfor %}
+    </ol>
 {% endblock %}
 

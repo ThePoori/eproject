@@ -108,15 +108,22 @@ def create_post(request):
 
 def post_search(request):
     query = None
-    results = []
+    post_results = []
+    image_results = []
     if 'query' in request.GET:
         form = SearchForm(data=request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            results = Post.published.annotate(similarity=TrigramSimilarity('title', query)).filter(similarity__gt=0).order_by('-similarity')
+            post_result1 = Post.published.annotate(similarity=TrigramSimilarity('title', query)).filter(similarity__gt=0)
+            post_result2 = Post.published.annotate(similarity=TrigramSimilarity('description', query)).filter(similarity__gt=0)
+            post_results = (post_result1 | post_result2).order_by('-similarity')
+            image_result1 = Image.objects.annotate(similarity=TrigramSimilarity('title', query)).filter(similarity__gt=0)
+            image_result2 = Image.objects.annotate(similarity=TrigramSimilarity('description', query)).filter(similarity__gt=0)
+            image_results = (image_result1 | image_result2).order_by('-similarity')
     context = {
         "query": query,
-        "results": results,
+        "post_results": post_results,
+        "image_results": image_results,
     }
     return render(request, 'blog/search.html', context)
 

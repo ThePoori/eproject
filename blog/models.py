@@ -1,3 +1,5 @@
+from selectors import SelectSelector
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
@@ -87,10 +89,13 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.name} : {self.post}"
 
+def image_upload_path(instance, filename):
+    year = timezone.now().year
+    return f"{year}/{filename}"
 
 class Image(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images', verbose_name="پست")
-    image_file = ResizedImageField(upload_to="post_images/", size=[500, 500], quality=75, crop=["middle", "center"])
+    image_file = ResizedImageField(upload_to=image_upload_path, size=[500, 500], quality=75, crop=["middle", "center"])
     title = models.CharField(max_length=250, verbose_name="عنوان", null=True, blank=True)
     description = models.TextField(verbose_name="توضیحات", null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -106,6 +111,10 @@ class Image(models.Model):
     def __str__(self):
         return self.title if self.title else "None"
 
+    def save(self, *args, **kwargs):
+        if not self.title and self.image_file:
+            self.title = os.path.basename(self.image_file.name)
+        super().save(*args, **kwargs)
 
 @receiver(post_delete, sender=Image)
 def delete_image_file(sender, instance, **kwargs):

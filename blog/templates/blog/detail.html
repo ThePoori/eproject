@@ -5,13 +5,17 @@
     <h1>Post Detail</h1>
     <h2>{{ post.title }}</h2>
     {{ post.description | censor | markdown | linebreaks }}
-    {% for img in post.images.all %}
+    {% if post.images.all.0 %}
         <br>
-        <img src="{{ img.image_file.url }}" alt="{{ img.title }}">
-    {% endfor %}
+        <img src="{{ post.images.all.0.image_file.url }}" alt="{{ post.images.all.0.title }}">
+    {% endif %}
     
     <hr>
     <p>{{ post.publish|date:"Y / m / d" }}</p>
+    {% if post.images.all.1 %}
+        <br>
+        <img src="{{ post.images.all.1.image_file.url }}" alt="{{ post.images.all.1.title }}">
+    {% endif %}
     {% with comments.count as cm_count %}
     <div>
         <h2> {{ cm_count }} comment{{ cm_count|pluralize }} </h2>
