@@ -128,3 +128,10 @@ def post_search(request):
     return render(request, 'blog/search.html', context)
 
 
+def profile(request):
+    user = request.user
+    post = Post.published.filter(author=user)
+    context = {
+        "post": post
+    }
+    return render(request, "blog/profile.html", context)
