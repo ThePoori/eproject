@@ -5,7 +5,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
-from blog.forms import TicketForm, CommentForm, PostForm, SearchForm
+from blog.forms import TicketForm, CommentForm, CreatePostForm, SearchForm
 from blog.models import *
 from django.db.models import Q
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
@@ -95,14 +95,16 @@ def post_comment(request, post_id):
 
 def create_post(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = CreatePostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect("blog:index")
+            Image.objects.create(image_file = form.cleaned_data['image1'], post = post)
+            Image.objects.create(image_file = form.cleaned_data['image2'], post = post)
+            return redirect("blog:profile")
     else:
-        form = PostForm()
+        form = CreatePostForm()
     return render(request, "forms/create_post.html", {"form": form})
 
 
@@ -135,3 +137,33 @@ def profile(request):
         "post": post
     }
     return render(request, "blog/profile.html", context)
+
+
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect("blog:profile")
+    return render(request, "forms/delete_post.html", {"post": post})
+
+
+def delete_image(request, image_id):
+    img = get_object_or_404(Image, id=image_id)
+    img.delete()
+    return redirect("blog:profile")
+
+
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CreatePostForm(request.POST, request.FILES, instance = post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            Image.objects.create(image_file=form.cleaned_data['image1'], post=post)
+            Image.objects.create(image_file=form.cleaned_data['image2'], post=post)
+            return redirect("blog:profile")
+    else:
+        form = CreatePostForm(instance = post)
+    return render(request, "forms/create_post.html", {"form": form, "post": post})

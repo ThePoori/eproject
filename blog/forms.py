@@ -36,7 +36,9 @@ class CommentForm(forms.ModelForm):
         fields = ['name', 'body']
 
 
-class PostForm(forms.ModelForm):
+class CreatePostForm(forms.ModelForm):
+    image1 = forms.ImageField(label="تصویر اول")
+    image2 = forms.ImageField(label="تصویر دوم")
     def clean_title(self):
         title = self.cleaned_data['title']
         if title:
@@ -53,7 +55,7 @@ class PostForm(forms.ModelForm):
                 return description
     class Meta:
         model = Post
-        fields = ['author', 'title', 'description', 'slug', 'publish', 'status', 'reading_time']
+        fields = ['title', 'description', 'reading_time']
 
 
 class SearchForm(forms.Form):

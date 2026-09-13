@@ -1,36 +1,32 @@
 {% extends 'parent/base.html' %}
 {% block title %}Create Post{% endblock %}
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.author.label }}
-        {{ form.author }}
-        {{ form.author.errors }}
-        <br>
-        {{ form.title.label }}
-        {{ form.title }}
-        {{ form.title.errors }}
-        <br>
-        {{ form.description.label }}
-        {{ form.description }}
-        {{ form.description.errors }}
-        <br>
-        {{ form.slug.label }}
-        {{ form.slug }}
-        {{ form.slug.errors }}
-        <br>
-        {{ form.publish.label }}
-        {{ form.publish }}
-        {{ form.publish.errors }}
-        <br>
-        {{ form.status.label }}
-        {{ form.status }}
-        {{ form.status.errors }}
-        <br>
-        {{ form.reading_time.label }}
-        {{ form.reading_time }}
-        {{ form.reading_time.errors }}
-        <br>
-        <input type="submit" value="Submit">
-    </form>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if post %}
+    	{% for img in post.images.all %}
+            <br>
+            <img src="{{ img.image_file.url }}" alt="{{ img.title }}">
+            <a href="{% url 'blog:delete_image' img.id %}"> حذف تصویر </a>
+    	{% endfor %}
+
+    {% endif %}
+    <br>
+    <input type="submit" value="Submit">
+</form>
+{% if form.errors %}
+    لطفا خطا ها زیر را اصلاح کنید!
+    <br>
+    {% for field in form %}
+    	{% if form.errors %}
+            {% for error in field.errors %}
+            	{{ field.label }} : {{ error }}
+            {% endfor %}
+    	{% endif %} 
+    {% endfor %}
+{% endif %}
+    {% if form.non_field_errors %}
+        {{ form.non_field_errors }}
+    {% endif %} 
 {% endblock %}
