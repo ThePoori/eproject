@@ -1,38 +1,120 @@
 {% extends 'parent/base.html' %}
+{% block title %}post list{% endblock %}
+{% load static %}
 {% load blog_tags %}
-{% block title %} Post Detail {% endblock %}
+{% load jformat %}
+{% block head %} {% endblock %}
+
 {% block content %}
-    <h2> آمار </h2>
-    <p> تعداد پست : {% total_posts %} </p>
-    <p> تعداد کامنت : {% total_comments %} </p>
-    <p> تاریخ آخرین پست : {% last_post_date %} </p>
 
-    {% latest_posts %}
-    <h2> محبوب ترین پست ها </h2>
-    {% most_popular_posts as pop_posts %}
+
+<!-- Preloader START -->
+	<div class="preloader">
+		<div class="loader">
+			<div class="sh1"></div>
+			<div class="sh2"></div>
+		</div>
+	</div>
+<!-- Preloader END -->
+
+<!-- **************** MAIN CONTENT START **************** -->
+<main>
+
+<!-- =======================
+Main hero START -->
+<section class="py-2 h-400 overflow-hidden position-relative"
+         style="background-image: url({% static 'images/cover/cv1.jpg'  %}); background-position: center center;">
+	<div class="container-fluid h-100 p-0">
+    <div class="row align-items-center h-100 text-center">
+      <div class="col-12">
+        <!-- Hero title -->
+        <h1 class="text-white display-4">تکنولوژی و برنامه نویسی</h1>
+      </div>
+    </div>
+  </div>
+</section>
+    <!-- =======================
+Main hero END -->
+
+<!-- =======================
+Latest articles START -->
+<section class="py-5">
+	<div class="container-fluid px-sm-5">
+		<div class="row">
+			<!-- Title -->
+      <div class="mb-4 text-center">
+        <h2 class="h1 m-0">اخرین مقالات</h2>
+      </div>
+		</div>
+    <div class="row g-3 g-sm-5">
+		{% latest_posts 3 %}
+      <!-- Card item END -->
+    </div>
+        <a href="{% url 'blog:post_list' %}" class="btn btn-dark mb-0">مشاهده همه</a>
+  </div>
+</section>
+
+
+<!-- =======================
+Latest articles END -->
+
+
+<!-- =======================
+Last week highlights START -->
+<section class="py-5">
+	<div class="container-fluid px-sm-5">
+		<div class="row">
+			<!-- Title -->
+      <div class="mb-4 text-center">
+        <h2 class="h1 m-0">محبوب ترین مقالات</h2>
+      </div>
+		</div>
+    <div class="row g-4 g-sm-5">
+    {% most_popular_posts 3 as pop_posts %}
     {% for post in pop_posts %}
-        <br>
-        <a href="{{ post.get_absolute_url }}">{{ post.title }} : with {{ post.comment_count }} comments</a>
-    {% endfor %}
+      <div class="col-sm-6 col-lg-4">
+        <!-- Card item START -->
+        <div class="card">
+          <!-- Card img -->
+          <div class="position-relative">
+            <img class="card-img rounded-0" src="{{ post.images.first.image_file.url }}" alt="Card image">
+            <div class="card-img-overlay d-flex align-items-start flex-column p-3">
+              <!-- Card overlay bottom -->
+              <div class="w-100 mt-auto">
+                <a href="#" class="badge text-bg-dark mb-2">{{ post.category }}</a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body px-0 pt-3">
+            <h4 class="card-title"><a href="{{ post.get_absolute_url }} " class="btn-link text-reset stretched-link">{{ post.title }}</a></h4>
+            <p>{{ post.description | markdown | truncatewords:50  }}</p>
+            <!-- Card info -->
+            <ul class="nav nav-divider align-items-center">
+              <li class="nav-item">{{ post.publish|jformat:"%Y/%m/%d-%H:%M" }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+        {% endfor %}
+      <!-- Card item END -->
+    </div>
+  </div>
+</section>
+<!-- =======================
+Last week highlights END -->
 
-    <h2> فعال ترین کاربر </h2>
-    {% most_popular_author as active_user_posts %}
-        {% if active_user_posts %}
-            {% for post in active_user_posts %}
-                <br>
-                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-                    ({{ post.author }})
-            {% endfor %}
-        {% else %}
-            <p>هیچ پستی برای نمایش وجود ندارد.</p>
-        {% endif %}
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
 
-    <h2> بیشترین زمان مطالعه </h2>
-        {% max_reading_time as max_post %}
-    <a href="{{ max_post.get_absolute_url }}">{{ max_post.title }}</a> ({{ max_post.reading_time }} دقیقه )
+<!-- Back to top -->
+<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
+<!-- =======================
+JS libraries, plugins and custom scripts -->
 
-    <h2> کمرین زمان مطالعه </h2>
-    {% min_reading_time as min_post %}
-    <a href="{{ min_post.get_absolute_url }}">{{ min_post.title }}</a> ({{ min_post.reading_time }} دقیقه )
+<!-- Bootstrap JS -->
+<script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Template Functions -->
+<script src="{% static 'js/functions.js' %}"></script>
 
 {% endblock %}

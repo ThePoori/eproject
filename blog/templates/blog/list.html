@@ -1,18 +1,160 @@
 {% extends 'parent/base.html' %}
-{% block title %} Post List {% endblock %}
-{% block content %}
-    <h1>Post List</h1>
-    <ol style="--length: {{ posts|length }}" role="list">
-    {% for field in posts %}
-        <li style="--i: {{ forloop.counter }}">
-        <h2>
-            <a href="{% url 'blog:post_detail' id=field.id %}">{{ field.title }}</a>
-        </h2>
-        <p>{{ field.description|truncatewords:12 }}</p>
-            <img src="{{ field.images.first.image_file.url }}" alt="{{ field.images.first.title }}">
-        </li>
-    {% endfor %}
-    </ol>
-    {% include 'partials/pagination.html' %}
-{% endblock %}
+{% block title %}post list{% endblock %}
+{% load static %}
+{% load blog_tags %}
+{% load jformat %}
 
+{% block head %}    {% endblock %}
+
+
+{% block content %}
+
+<!-- Preloader START -->
+	<div class="preloader">
+		<div class="loader">
+			<div class="sh1"></div>
+			<div class="sh2"></div>
+		</div>
+	</div>
+<!-- Preloader END -->
+
+<main>
+
+<section class="pt-4">
+	<div class="container">
+		<div class="row">
+      <div class="col-12">
+				<div class="border p-4 text-center rounded-3">
+                    {% if category %}
+                        <h1><a href="{% url 'blog:post_list' %}" > لیست پست های {{ category }}</a></h1>
+                    {% else %}
+                        <h1><a href="{% url 'blog:post_list' %}" >لیست پست ها</a></h1>
+                    {% endif %}
+					<nav class="d-flex justify-content-center" aria-label="breadcrumb">
+					</nav>
+				</div>
+      </div>
+    </div>
+	</div>
+</section>
+
+<section class="position-relative pt-0">
+	<div class="container" data-sticky-container>
+		<div class="row">
+			<!-- Main Post START -->
+			<div class="col-lg-9">
+				<!-- Card item START -->
+                {% for post in posts %}
+				<div class="card mb-4">
+					<div class="row">
+						<div class="col-md-5">
+							<img class="rounded-3" src="{{ post.images.first.image_file.url }}" alt="{{ post.images.first.title }}">
+						</div>
+						<div class="col-md-7 mt-3 mt-md-0">
+							<a href="#" class="badge text-bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>{{ post.category}}</a>
+							<h4><a href="{{post.get_absolute_url}}" class="btn-link stretched-link text-reset">{{ post.title}}</a></h4>
+							<p>{{ post.description | markdown | truncatewords:40 }} </p>
+							<!-- Card info -->
+							<ul class="nav nav-divider align-items-center d-none d-sm-inline-block">
+								<li class="nav-item">
+									<div class="nav-link">
+										<div class="d-flex align-items-center position-relative">
+											<div class="avatar avatar-xs">
+												<img class="avatar-img rounded-circle" src="{{ post.author.account.photo.url }}" alt="avatar">
+											</div>
+											<span class="ms-3">توسط <a href="#" class="stretched-link text-reset btn-link">{{ post.author }}</a></span>
+										</div>
+									</div>
+								</li>
+								<li class="nav-item">{{ post.publish|jformat:"%Y/%m/%d-%H:%M" }}</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+                {% endfor %}
+				<!-- Card item END -->
+
+			</div>
+			<!-- Main Post END -->
+
+			<!-- Sidebar START -->
+			<div class="col-lg-3 mt-5 mt-lg-0">
+				<div data-sticky data-margin-top="80" data-sticky-for="767">
+					<!-- Trending topics widget START -->
+{#					<div>#}
+{#						<h4 class="mb-3">دسته بندی</h4>#}
+{#						<!-- Category item -->#}
+{#						<div class="text-center mb-3 card-bg-scale position-relative overflow-hidden rounded" style="background-image:url("#"); background-position: center left; background-size: cover;">#}
+{#							<div class="bg-dark-overlay-4 p-3">#}
+{#								<a href="{% url 'blog:post_list_category' 'تکنولوژِی' %}" class="stretched-link btn-link text-white h5">تکنولوژِی</a>#}
+{#							</div>#}
+{#						</div>#}
+{#						<!-- Category item -->#}
+{#						<div class="text-center mb-3 card-bg-scale position-relative overflow-hidden rounded" style="background-image:url(assets/images/blog/4by3/02.jpg); background-position: center left; background-size: cover;">#}
+{#							<div class="bg-dark-overlay-4 p-3">#}
+{#								<a href="{% url 'blog:post_list_category' 'هوش مصنوعی' %}" class="stretched-link btn-link text-white h5">هوش مصنوعی</a>#}
+{#							</div>#}
+{#						</div>#}
+{#						<!-- Category item -->#}
+{#						<div class="text-center mb-3 card-bg-scale position-relative overflow-hidden rounded" style="background-image:url(assets/images/blog/4by3/03.jpg); background-position: center left; background-size: cover;">#}
+{#							<div class="bg-dark-overlay-4 p-3">#}
+{#								<a href="{% url 'blog:post_list_category' 'زبان برنامه نویسی' %}" class="stretched-link btn-link text-white h5">زبان برنامه نویسی</a>#}
+{#							</div>#}
+{#						</div>#}
+{#						<!-- Category item -->#}
+{#						<div class="text-center mb-3 card-bg-scale position-relative overflow-hidden rounded" style="background-image:url(assets/images/blog/4by3/04.jpg); background-position: center left; background-size: cover;">#}
+{#							<div class="bg-dark-overlay-4 p-3">#}
+{#								<a href="{% url 'blog:post_list_category' 'بلاکچین' %}" class="stretched-link btn-link text-white h5">بلاکچین</a>#}
+{#							</div>#}
+{#						</div>#}
+{#						<!-- Category item -->#}
+{#						<div class="text-center mb-3 card-bg-scale position-relative overflow-hidden rounded" style="background-image:url(assets/images/blog/4by3/05.jpg); background-position: center left; background-size: cover;">#}
+{#							<div class="bg-dark-overlay-4 p-3">#}
+{#								<a href="{% url 'blog:post_list_category' 'سایر' %}" class="stretched-link btn-link text-white h5">سایر</a>#}
+{#							</div>#}
+{#						</div>#}
+{#						<!-- View All Category button -->#}
+{#						<div class="text-center mt-3">#}
+{#							<a href="{% url 'blog:post_list' %}" class="text-muted text-primary-hover"><u>مشاهده همه</u></a>#}
+{#						</div>#}
+{#					</div>#}
+					<!-- Trending topics widget END -->
+
+					<div class="row">
+						<!-- Recent post widget START -->
+						<div class="col-12 col-sm-6 col-lg-12">
+							<h4 class="mt-4 mb-3">پربحث ترین ها</h4>
+							<!--  post item -->
+                            {% most_popular_posts 5 as pop_posts %}
+                            {% for post in pop_posts %}
+							<div class="card mb-3">
+								<div class="row g-3">
+									<div class="col-4">
+										<img class="rounded" src="{{ post.images.first.image_file.url}}" alt="">
+									</div>
+									<div class="col-8">
+										<h6><a href="{{post.get_absolute_url}}" class="btn-link stretched-link text-reset">{{post.title}}</a></h6>
+										<div class="small mt-1">{{ post.publish|jformat:"%Y/%m/%d-%H:%M" }}</div>
+									</div>
+								</div>
+							</div>
+                            {% endfor %}
+						</div>
+						<!--  post widget END -->
+
+					</div>
+				</div>
+			</div>
+			<!-- Sidebar END -->
+		</div> <!-- Row end -->
+	</div>
+</section>
+</main>
+
+	<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'vendor/sticky-js/sticky.min.js' %}"></script>
+	<script src="{% static 'js/functions.js' %}"></script>
+{#    {% include "partials/pagination.html" with page=page_obj%}#}
+    {% include "partials/pagination.html" with page=posts%}
+{% endblock %}

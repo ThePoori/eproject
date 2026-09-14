@@ -1,15 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Model
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
-from blog.forms import TicketForm, CommentForm, CreatePostForm, SearchForm
+from blog.forms import *
 from blog.models import *
 from django.db.models import Q
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
-
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -92,7 +92,7 @@ def post_comment(request, post_id):
     }
     return render(request, "forms/comment.html", context)
 
-
+@login_required
 def create_post(request):
     if request.method == 'POST':
         form = CreatePostForm(request.POST, request.FILES)
@@ -129,7 +129,7 @@ def post_search(request):
     }
     return render(request, 'blog/search.html', context)
 
-
+@login_required
 def profile(request):
     user = request.user
     post = Post.published.filter(author=user)
@@ -138,7 +138,7 @@ def profile(request):
     }
     return render(request, "blog/profile.html", context)
 
-
+@login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
@@ -146,13 +146,13 @@ def delete_post(request, post_id):
         return redirect("blog:profile")
     return render(request, "forms/delete_post.html", {"post": post})
 
-
+@login_required
 def delete_image(request, image_id):
     img = get_object_or_404(Image, id=image_id)
     img.delete()
     return redirect("blog:profile")
 
-
+@login_required
 def edit_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
@@ -167,3 +167,27 @@ def edit_post(request, post_id):
     else:
         form = CreatePostForm(instance = post)
     return render(request, "forms/create_post.html", {"form": form, "post": post})
+
+
+# def user_login(request):
+#     if request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             user = authenticate(request, username=cd['username'], password=cd['password'])
+#             if user is not None:
+#                 if user.is_active:
+#                     login(request, user)
+#                     return redirect("blog:profile")
+#                 else:
+#                     return HttpResponse("Your account has been disabled")
+#             else:
+#                 return HttpResponse("Invalid login details supplied")
+#     else:
+#         form = LoginForm()
+#     return render(request, "registration/login.html", {"form": form})
+
+
+def log_out(request):
+    logout(request)
+    return redirect(request.META.get('HTTP_REFERER'))
