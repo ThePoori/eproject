@@ -191,3 +191,17 @@ def edit_post(request, post_id):
 def log_out(request):
     logout(request)
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            Account.objects.create(user=user)
+            return render(request, "registration/register_done.html", {'user': user})
+    else:
+        form = UserRegistrationForm()
+    return render(request, "registration/register.html", {"form": form})

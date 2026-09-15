@@ -138,3 +138,18 @@ class Image(models.Model):
 def delete_image_file(sender, instance, **kwargs):
     if instance.image_file:
         default_storage.delete(instance.image_file.name)
+
+
+class Account(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='account')
+    date_of_birth = models.DateField(blank=True, null=True, verbose_name = 'تاریخ تولد')
+    bio = models.TextField(blank=True, null=True, verbose_name='بایو')
+    photo = ResizedImageField(verbose_name="تصویر", upload_to='account_images/', size=[500, 500], quality=75, crop=["middle", "center"], blank=True, null=True)
+    job = models.CharField(max_length = 250, verbose_name = 'شغل', blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name = "اکانت"
+        verbose_name_plural = "اکانت ها"

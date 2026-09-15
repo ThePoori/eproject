@@ -136,11 +136,11 @@ MEDIA_ROOT = os.path.join("media")
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
-    },
-}
+# MAILERS = {
+#     "default": {
+#         "BACKEND": "django.core.mail.backends.console.EmailBackend",
+#     },
+# }
 
 # django-resized
 # DJANGORESIZED_DEFAULT_SIZE = [1920, 1080]
@@ -154,3 +154,5 @@ DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = False
 LOGIN_REDIRECT_URL = '/blog/profile/'
 LOGIN_URL = '/blog/login/'
 LOGOUT_URL = '/blog/logout/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
