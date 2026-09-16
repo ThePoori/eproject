@@ -139,7 +139,7 @@ def delete_image_file(sender, instance, **kwargs):
     if instance.image_file:
         default_storage.delete(instance.image_file.name)
 
-
+# one place for author custom
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='account')
     date_of_birth = models.DateField(blank=True, null=True, verbose_name = 'تاریخ تولد')
