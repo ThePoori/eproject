@@ -133,7 +133,7 @@ class Image(models.Model):
         storage.delete(path)
         super().delete(*args, **kwargs)
 
-
+# deleting images
 @receiver(post_delete, sender=Image)
 def delete_image_file(sender, instance, **kwargs):
     if instance.image_file:
