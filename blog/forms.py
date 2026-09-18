@@ -54,7 +54,7 @@ class CreatePostForm(forms.ModelForm):
                 return description
     class Meta:
         model = Post
-        fields = ['title', 'description', 'reading_time']
+        fields = ['title', 'description', 'reading_time', 'category']
 
 
 class SearchForm(forms.Form):
@@ -79,11 +79,12 @@ class UserRegistrationForm(forms.ModelForm):
             raise forms.ValidationError('پسورد ها مطابقت ندارند!')
         return cd['password2']
 
-class EditUserForm(forms.ModelForm):
+class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name','last_name' , 'email']
 
-class EditAccountForm(forms.ModelForm):
-    model = Account
-    fields = ['date_of_birth', 'bio', 'job', 'photo']
+class AccountEditForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['date_of_birth', 'bio', 'job', 'photo']

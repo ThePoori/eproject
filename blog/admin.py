@@ -21,8 +21,8 @@ class CommentInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    fields = ["author", "title", "description", "slug", "publish", "status", "reading_time"]
-    list_display = ["title", "author", "publish", "status"]
+    fields = ["author", "title", "description", "slug", "publish", "status", "reading_time", 'category']
+    list_display = ["title", "author", 'category', "publish", "status"]
     list_filter = ["publish", "status"]
     search_fields = ["title", "description"]
     list_editable = ["publish", "status"]

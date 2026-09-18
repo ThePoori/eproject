@@ -17,27 +17,31 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     return render(request, "blog/index.html")
-#
-# def post_list(request):
-#     posts = Post.published.all()
-#     paginator = Paginator(posts, 2)
-#     page_number = request.GET.get('page', 1)
-#     try:
-#         posts = paginator.get_page(page_number)
-#     except EmptyPage:
-#         posts = paginator.get_page(paginator.num_pages)
-#     except PageNotAnInteger:
-#         posts = paginator.get_page(1)
-#     context = {
-#         "posts": posts
-#     }
-#     return render(request, "blog/list.html", context)
 
-class PostListView(ListView):
-    queryset = Post.published.all()
-    context_object_name = "posts"
-    paginate_by = 2
-    template_name = 'blog/list.html'
+def post_list(request, category=None):
+    if category is not None:
+        posts = Post.published.filter(category=category)
+    else:
+        posts = Post.published.all()
+    paginator = Paginator(posts, 2)
+    page_number = request.GET.get('page', 1)
+    try:
+        posts = paginator.get_page(page_number)
+    except EmptyPage:
+        posts = paginator.get_page(paginator.num_pages)
+    except PageNotAnInteger:
+        posts = paginator.get_page(1)
+    context = {
+        "posts": posts,
+        "category": category,
+    }
+    return render(request, "blog/list.html", context)
+
+# class PostListView(ListView):
+#     queryset = Post.published.all()
+#     context_object_name = "posts"
+#     paginate_by = 2
+#     template_name = 'blog/list.html'
 
 
 def post_detail(request, id):
@@ -205,3 +209,22 @@ def register(request):
     else:
         form = UserRegistrationForm()
     return render(request, "registration/register.html", {"form": form})
+
+
+@login_required
+def edit_account(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(request.POST, instance=request.user)
+        account_form = AccountEditForm(request.POST, instance=request.user.account, files=request.FILES)
+        if user_form.is_valid() and account_form.is_valid():
+            user_form.save()
+            account_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+        account_form = AccountEditForm(instance=request.user.account)
+    context = {
+        "user_form": user_form,
+        "account_form": account_form
+    }
+    return render(request, "registration/edit_account.html", context)
+
