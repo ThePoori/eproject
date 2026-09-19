@@ -42,6 +42,7 @@ class Post(models.Model):
     # Choose Fields
     status = models.CharField(max_length = 2, choices = Status.choices, default = Status.DRAFT)
     reading_time = models.PositiveIntegerField(verbose_name = "زمان مطالعه")
+    # Category Fields
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='سایر')
     
     # Manages
