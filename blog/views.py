@@ -228,3 +228,14 @@ def edit_account(request):
     }
     return render(request, "registration/edit_account.html", context)
 
+
+def author_details(request, username):
+    user = User.objects.get(username=username)
+    account = Account.objects.get(user=user)
+    posts = Post.published.filter(author=user)
+    context = {
+        "posts": posts,
+        "account": account,
+        "user": user
+    }
+    return render(request, "blog/author_details.html", context)

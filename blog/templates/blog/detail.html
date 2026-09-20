@@ -42,7 +42,7 @@ Inner intro START -->
                       <div class="avatar avatar-sm">
                         <img class="avatar-img rounded-circle" src="{{post.author.account.photo.url}}" alt="avatar">
                       </div>
-                      <span class="ms-3">با <a href="#" class="stretched-link text-reset btn-link">{{ post.author }}</a></span>
+                      <span class="ms-3">با <a href="{% url 'blog:author_details' post.author.username %}" class="stretched-link text-reset btn-link">{{ post.author }}</a></span>
                     </div>
                   </div>
                 </li>
@@ -94,7 +94,7 @@ Main START -->
 					<div>
 						<div class="d-sm-flex align-items-center justify-content-between">
 							<div>
-					<h4 class="m-0"><a href="#" class="text-reset">{{ post.author }}</a></h4>
+					<h4 class="m-0"><a href="{% url 'blog:author_details' post.author.username %}" class="text-reset">{{ post.author }}</a></h4>
 								<small>{{ post.author.account.job}}</small>
 							</div>
 						</div>

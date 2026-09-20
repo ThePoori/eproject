@@ -7,7 +7,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('posts/', views.post_list, name='post_list'),
     path('posts/<str:category>', views.post_list, name='post_list_category'),
-    path('posts/<int:id>/', views.post_detail, name='post_detail'),
+    path('posts/detail/<int:id>/', views.post_detail, name='post_detail'),
     path('posts/<post_id>/comment/', views.post_comment, name='post_comment'),
     path('ticket/', views.ticket, name='ticket'),
     path('search/', views.post_search, name='post_search'),
@@ -26,4 +26,5 @@ urlpatterns = [
     path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('register/', views.register, name='register'),
     path('account/edit', views.edit_account, name='edit_account'),
+    path('author/<str:username>/', views.author_details, name='author_details'),
 ]

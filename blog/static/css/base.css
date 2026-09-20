@@ -17310,3 +17310,7 @@ a.text-primary-hover:hover, button.text-primary-hover:hover {
 }
 /*User CSS*/
 /*# sourceMappingURL=style-rtl.css.map */
+
+.author_img_border {
+  border-radius: 60%;
+}

@@ -62,7 +62,7 @@
 											<div class="avatar avatar-xs">
 												<img class="avatar-img rounded-circle" src="{{ post.author.account.photo.url }}" alt="avatar">
 											</div>
-											<span class="ms-3">توسط <a href="#" class="stretched-link text-reset btn-link">{{ post.author }}</a></span>
+											<span class="ms-3">توسط <a href="{% url 'blog:author_details' post.author.username %}" class="stretched-link text-reset btn-link">{{ post.author }}</a></span>
 										</div>
 									</div>
 								</li>
