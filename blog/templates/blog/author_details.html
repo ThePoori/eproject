@@ -3,23 +3,28 @@
 
 {% block content %}
     <center>
-    <h1>
-        {{ user.first_name }} {{ user.last_name }}
-    </h1>
-    <br>
-    <h4>
-        {{ account.bio }}
-    </h4>
-    <h4>
-        {{ account.job }}
-    </h4>
-    {% for post in posts %}
-        <h2>
-            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-        </h2>
-        <div class="author_img_border">
-            <img src="{{ post.images.all.0.image_file.url }}" alt="{{ post.images.all.0.title }}" style="border-radius: 7%;">
-        </div>
-    {% endfor %}
+        <img src="{{ account.photo.url }}" alt="" style="width: 150px; height: 150px; border-radius: 50%">
+        <h1>
+            {{ user.first_name }} {{ user.last_name }}
+        </h1>
+        <br>
+        <h5>
+            {{ account.date_of_birth|date:"Y / m / d" }}
+        </h5>
+        <h4>
+            {{ account.bio }}
+        </h4>
+        <h4>
+            {{ account.job }}
+        </h4>
+        <hr>
+        {% for post in posts %}
+            <h2>
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+            </h2>
+            <div class="author_img_border">
+                <img src="{{ post.images.all.0.image_file.url }}" alt="{{ post.images.all.0.title }}" style="border-radius: 7%;">
+            </div>
+        {% endfor %}
     </center>
 {% endblock %}

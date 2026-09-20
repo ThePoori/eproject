@@ -84,13 +84,15 @@
               </div>
               <!-- Card END -->
             </div>
-
-
+              {% for comment in comments %}
+              	    <h2> {{ comment.name }} </h2>
+                  <br>
+                  <h4> {{ comment.body }} </h4>
+              {% endfor %}
             </div>
           </div>
           <!-- Post list table START -->
           <div class="card border bg-transparent rounded-3">
-
               <!-- Post list table START -->
               <div class="table-responsive border-0">
                 <table class="table align-middle p-4 mb-0 table-hover table-shrink">
@@ -151,7 +153,6 @@ Main contain END -->
 
 </main>
 <!-- **************** MAIN CONTENT END **************** -->
-
 <!-- Back to top -->
 <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 <!-- =======================
@@ -166,6 +167,6 @@ JS libraries, plugins and custom scripts -->
 
 <!-- Template Functions -->
 <script src="{% static 'js/functions.js' %}"></script>
-
+{% include 'partials/pagination.html' with page=post %}
 
 {% endblock %}

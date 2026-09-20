@@ -137,8 +137,18 @@ def post_search(request):
 def profile(request):
     user = request.user
     post = Post.published.filter(author=user)
+    comments = Comment.objects.filter(post__in=post)
+    paginator = Paginator(post, 2)
+    page_number = request.GET.get('page', 1)
+    try:
+        post = paginator.get_page(page_number)
+    except EmptyPage:
+        post = paginator.get_page(paginator.num_pages)
+    except PageNotAnInteger:
+        post = paginator.get_page(1)
     context = {
-        "post": post
+        "post": post,
+        "comments": comments,
     }
     return render(request, "blog/profile.html", context)
 
