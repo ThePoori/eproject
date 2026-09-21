@@ -132,7 +132,7 @@ def post_search(request):
         "image_results": image_results,
     }
     return render(request, 'blog/search.html', context)
-
+# one place for changing settings and user
 @login_required
 def profile(request):
     user = request.user
