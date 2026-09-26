@@ -16,7 +16,7 @@ urlpatterns = [
     path('profile/delete_post/<post_id>', views.delete_post, name='delete_post'),
     path('profile/delete_image/<image_id>', views.delete_image, name='delete_image'),
     path('profile/edit_post/<post_id>', views.edit_post, name='edit_post'),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('login/', views.CustomLoginView.as_view(), name='login'),
     path('logout/', views.log_out, name='logout'),
     path('password-change/', auth_views.PasswordChangeView.as_view(success_url = 'done'), name='password_change'),
     path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),

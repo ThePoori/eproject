@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Model
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -10,13 +11,18 @@ from blog.models import *
 from django.db.models import Q
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import views as auth_views
 
 # Create your views here.
 
 
 
 def index(request):
-    return render(request, "blog/index.html")
+    random_post = Post.published.order_by('?').first()
+    context = {
+        "random_post": random_post,
+    }
+    return render(request, "blog/index.html", context )
 
 def post_list(request, category=None):
     if category is not None:
@@ -249,3 +255,11 @@ def author_details(request, username):
         "user": user
     }
     return render(request, "blog/author_details.html", context)
+
+
+class CustomLoginView(auth_views.LoginView):
+    template_name = 'registration/login.html'
+
+    extra_context = {
+        'page_title': 'ورود به حساب کاربری'
+    }

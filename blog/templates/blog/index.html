@@ -102,6 +102,17 @@ Last week highlights START -->
 </section>
 <!-- =======================
 Last week highlights END -->
+<center>
+    {% if random_post %}
+        <h2> پست پیشنهادی </h2>
+        <br>
+        <img class="card-img rounded-0" src="{{ random_post.images.first.image_file.url }}" alt="{{ random_post.images.first.title }}" style="width: 500px; height: 500px;">
+        <br>
+        <h3>{{ random_post.title }}</h3>
+        <p>{{ random_post.description|truncatewords:20 }}</p>
+        <p>{{ random_post.publish }}</p>
+    {% endif %}
+</center>
 
 </main>
 <!-- **************** MAIN CONTENT END **************** -->
