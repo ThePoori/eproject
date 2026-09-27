@@ -67,7 +67,7 @@ def post_detail(request, id):
 #     template_name = 'blog/detail.html'
 #     pk_url_kwarg = 'id'
 
-
+# members can contact by my company
 def ticket(request):
     if request.method == 'POST':
         form = TicketForm(request.POST)
